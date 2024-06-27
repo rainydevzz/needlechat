@@ -13,13 +13,13 @@
         let k = await request('/users', 'GET')
         for(const i of k) {
             if(i.PublicKey != localStorage.getItem('publicKey') as string) {
-                k = i.PublicKey;
+                k = i;
                 break;
             }
         }
         for(const i of r) {
-            let d = (decrypt(i.Content, i.Nonce, k, localStorage.getItem('privateKey') as string) as Uint8Array)
-            t.push(String.fromCharCode(...d))
+            let d = (decrypt(i.Content, i.Nonce, k.PublicKey, localStorage.getItem('privateKey') as string) as Uint8Array)
+            t.push({message: String.fromCharCode(...d), name: k.Username})
         }
         arr = t
     }
@@ -37,14 +37,14 @@
             }
         }
         let e = encrypt(k, localStorage.getItem('privateKey') as string, content)
-        let id = localStorage.getItem('id') as string
-        await request('/message', 'POST', {content: JSON.stringify(Array.from(e.message)), userid: id, nonce: JSON.stringify(Array.from(e.nonce))})
+        let id = localStorage.getItem('username') as string
+        await request('/message', 'POST', {content: JSON.stringify(Array.from(e.message)), username: id, nonce: JSON.stringify(Array.from(e.nonce))})
         window.location.href = '/'
     }
 
 </script>
 {#each arr as a}
-    <h1>{a}</h1>
+    <h1>{a.message} - {a.name}</h1>
 {/each}
 <form on:submit|preventDefault={onSubmit}>
     <label>

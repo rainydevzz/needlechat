@@ -1,7 +1,7 @@
 package models
 
 type MessageForm struct {
-	Content string
-	UserId  string
-	Nonce   string
+	Content  string
+	Username string
+	Nonce    string
 }

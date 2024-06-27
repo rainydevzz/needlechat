@@ -15,7 +15,7 @@ func PostMessage(app *fiber.App) {
 			return err
 		}
 		uuid := uuid.NewString()
-		res, _ := c.Locals("db").(*gorm.DB).Create(models.Message{MessageId: uuid, Content: messageData.Content, Author: messageData.UserId, Nonce: messageData.Nonce}).Rows()
+		res, _ := c.Locals("db").(*gorm.DB).Create(models.Message{MessageId: uuid, Content: messageData.Content, Author: messageData.Username, Nonce: messageData.Nonce}).Rows()
 		defer res.Close()
 		return c.JSON(res)
 	})
